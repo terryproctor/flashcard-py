@@ -5,13 +5,18 @@ BACKGROUND_COLOR = "#B1DDC6"
 #--------------------------------------------------------
 # UI
 window = Tk()
-window.config(bg=BACKGROUND_COLOR, padx=40, pady=35)
+window.config(bg=BACKGROUND_COLOR, padx=50, pady=50)
 window.title("Flashy")
 
 #Canvas for card 800 x 526
+language = "French"
+word = "trouve"
+
 card_front = PhotoImage(file="images/card_front.png")
 canvas = Canvas(width=800, height=526, bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.create_image(400, 263, image=card_front)
+canvas.create_text(400, 150, text=f"{language}", font="Ariel 40 italic")
+canvas.create_text(400, 263, text=f"{word}", font="Ariel 60 bold")
 canvas.grid(row=0, column=0, columnspan=3)
 
 cross_image = PhotoImage(file="images/wrong.png")
