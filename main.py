@@ -2,13 +2,13 @@ from tkinter import *
 import pandas as pd 
 import random
 
-
 BACKGROUND_COLOR = "#B1DDC6"
 # read csv
 df = pd.read_csv("./data/french_words.csv")
 #orient allows to go through each row and get both the 'French' and 'English' (keys) for a random row
 to_learn = df.to_dict(orient='records')
 language = "French"
+# current word to learn both English and French
 current_card = {}
 
 
@@ -23,8 +23,8 @@ def change_word():
     canvas.itemconfig(card_word, fill="black")
     canvas.itemconfig(card_title, text="French", fill="black")
 
-    #get word
-    dict_len = len(df['French'])
+    #get word to learn
+    dict_len = len(to_learn)
     rand_int = random.randint(0, dict_len-1)
     current_card = to_learn[rand_int]
     french_word = current_card['French']
@@ -39,15 +39,24 @@ def flip_card():
     canvas.itemconfig(card_word, text=current_card['English'], fill="white")
     canvas.itemconfig(card_title, text="English", fill="white")
 
+def tick():
+    global to_learn
+
+    change_word()
+    to_learn.remove(current_card)
+    print(len(to_learn))
+    
+
 #---------------------------------------------------------------------------------
 # UI
 window = Tk()
 window.config(bg=BACKGROUND_COLOR, padx=50, pady=50)
 window.title("Flashy")
 
+#used to timer 3 seconds after pressing button before flipping
 flip_timer = window.after(3000, func=flip_card)
-#Canvas for card 800 x 526
-word = "word"
+
+word = "word to learn"
 
 card_front = PhotoImage(file="images/card_front.png")
 card_back = PhotoImage(file="images/card_back.png")
@@ -62,7 +71,7 @@ cross_button = Button(image = cross_image, highlightthickness = 0, command=chang
 cross_button.grid(row=1, column=0)
 
 tick_image = PhotoImage(file="images/right.png")
-tick_button = Button(image = tick_image, highlightthickness = 0, command=change_word)
+tick_button = Button(image = tick_image, highlightthickness = 0, command=tick)
 tick_button.grid(row=1, column=2)
 
 window.mainloop()
