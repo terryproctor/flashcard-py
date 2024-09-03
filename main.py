@@ -11,7 +11,6 @@ language = "French"
 # current word to learn both English and French
 current_card = {}
 
-
 #---------------------------------------------------------------------------
 #change word on buttons
 def change_word():
@@ -46,7 +45,6 @@ def tick():
     to_learn.remove(current_card)
     print(len(to_learn))
     
-
 #---------------------------------------------------------------------------------
 # UI
 window = Tk()
