@@ -3,10 +3,30 @@ import pandas as pd
 import random
 
 BACKGROUND_COLOR = "#B1DDC6"
+
 # read csv
-df = pd.read_csv("./data/french_words.csv")
+# df = pd.read_csv("./data/french_words.csv")
 #orient allows to go through each row and get both the 'French' and 'English' (keys) for a random row
-to_learn = df.to_dict(orient='records')
+# to_learn = df.to_dict(orient='records')
+
+def check_for_words_to_learn():
+    try:
+        open('./data/words_to_learn.csv', 'r')
+    except:
+        data = pd.read_csv("./data/french_words.csv")
+        df = pd.DataFrame(data)
+        to_learn = df.to_dict(orient='records')
+    else:
+        with open('./data/words_to_learn.csv', 'r') as data:
+            df = pd.DataFrame(data)   
+            to_learn = df.to_dict(orient='records') 
+            print(to_learn)
+    finally:
+        return to_learn
+
+to_learn = check_for_words_to_learn()
+#print(to_learn)
+
 language = "French"
 # current word to learn both English and French
 current_card = {}
@@ -43,7 +63,11 @@ def tick():
 
     change_word()
     to_learn.remove(current_card)
-    print(len(to_learn))
+    to_learn_df = pd.DataFrame(to_learn)
+    to_learn_df.to_csv('./data/words_to_learn.csv')
+
+
+
     
 #---------------------------------------------------------------------------------
 # UI
@@ -52,7 +76,8 @@ window.config(bg=BACKGROUND_COLOR, padx=50, pady=50)
 window.title("Flashy")
 
 #used to timer 3 seconds after pressing button before flipping
-flip_timer = window.after(3000, func=flip_card)
+def flip_timer():
+    window.after(3000, func=flip_card)
 
 word = "word to learn"
 
@@ -71,5 +96,7 @@ cross_button.grid(row=1, column=0)
 tick_image = PhotoImage(file="images/right.png")
 tick_button = Button(image = tick_image, highlightthickness = 0, command=tick)
 tick_button.grid(row=1, column=2)
+
+#change_word()
 
 window.mainloop()
